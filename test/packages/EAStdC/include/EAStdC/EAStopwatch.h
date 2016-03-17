@@ -10,6 +10,8 @@
 #define EASTDC_API
 #define EASTDC_LOCAL
 
+#include <chrono>
+
 namespace EA {
 namespace StdC {
 
@@ -25,6 +27,10 @@ namespace StdC {
 			kUnitsCPUCycles    =    1,  /// CPU clock ticks (or similar equivalent for the platform). Not recommended for use in shipping softare as many systems alter their CPU frequencies at runtime.
 			kUnitsNanoseconds  =    2,  /// For a 1GHz processor, 1 nanosecond is the same as 1 clock tick.
 			kUnitsMilliseconds =    4,  /// For a 1GHz processor, 1 millisecond is the same as 1,000,000 clock ticks.
+			kUnitsMicroseconds =    6,  
+			kUnitsSeconds      =    7,  
+			kUnitsMinutes      =    8,  
+			kUnitsUserDefined  =    1000,  
 		};
 
 	public:
@@ -34,7 +40,12 @@ namespace StdC {
 		/// Stopwatch and implement GetUserDefinedStopwatchCycle or call 
 		/// SetUserDefinedUnitsToStopwatchCyclesRatio in order to allow it 
 		/// to know how to convert units.
-		explicit Stopwatch(int nUnits = kUnitsCycles, bool bStartImmediately = false) { } 
+		explicit Stopwatch(int nUnits = kUnitsCycles, bool bStartImmediately = false)
+			: mnStartTime(0)
+			, mnTotalElapsedTime(0)
+			, mnUnits(0)
+			, mfStopwatchCyclesToUnitsCoefficient(1.f)
+			 { } 
 
 		/// Start
 		/// Starts the stopwatch. Continues where it was last stopped. 
@@ -44,6 +55,15 @@ namespace StdC {
 		/// Stop
 		/// Stops the stopwatch it it was running and retaines the elasped time.
 		void Stop();
+
+        /// Restart
+        void Restart();
+
+        /// GetUnits
+        int GetUnits();
+
+        /// GetElapsedTimeFloat
+        float GetElapsedTimeFloat() const;
 
 		/// GetElapsedTime
 		/// Gets the elapsed time, which properly takes into account any 
@@ -71,6 +91,12 @@ namespace StdC {
 		/// and variable runtime clock speed.
 		static uint64_t GetCPUCycle();
 
+        /// GetUnitsPerCPUCycle
+        static double GetUnitsPerCPUCycle(EA::StdC::Stopwatch::Units);
+
+        /// GetUnitsPerStopwatchCycle
+        static double GetUnitsPerStopwatchCycle(EA::StdC::Stopwatch::Units);
+
 	private:
 		uint64_t    mnStartTime;                            /// Start time; always in cycles.
 		uint64_t    mnTotalElapsedTime;                     /// Elapsed time; always in cycles.
@@ -86,7 +112,7 @@ namespace StdC {
 	public:
 		/// LimitStopwatch
 		/// Constructor
-		LimitStopwatch(int nUnits = kUnitsCycles, uint64_t nLimit = 0, bool bStartImmediately = false) { }
+		LimitStopwatch(int nUnits = kUnitsCycles, uint64_t nLimit = 0, bool bStartImmediately = false) : Stopwatch(), mnEndTime(0) { }
 
 		/// IsTimeUp
 		/// Returns true if the limit has been reached. Highly efficient.
@@ -132,6 +158,23 @@ void EA::StdC::Stopwatch::Stop()
 	}
 }
 
+inline
+void EA::StdC::Stopwatch::Restart()
+{
+    mnStartTime = 0;
+    mnTotalElapsedTime = 0;
+    mnUnits = 0;
+    mfStopwatchCyclesToUnitsCoefficient = 1.f;
+
+    Start();
+}
+
+inline
+int EA::StdC::Stopwatch::GetUnits()
+{
+    return mnUnits; 
+}
+
 
 inline
 uint64_t EA::StdC::Stopwatch::GetElapsedTime() const
@@ -157,6 +200,29 @@ uint64_t EA::StdC::Stopwatch::GetElapsedTime() const
 	return (uint64_t)((nFinalTotalElapsedTime64 * mfStopwatchCyclesToUnitsCoefficient) + 0.49999f);
 }
 
+inline
+float EA::StdC::Stopwatch::GetElapsedTimeFloat() const
+{
+	uint64_t nFinalTotalElapsedTime64(mnTotalElapsedTime);
+
+	if(mnStartTime) // We we are currently running, then take into account time passed since last start.
+	{
+		uint64_t nCurrentTime;
+
+		// See the 'Stop' function for an explanation of the code below.
+		if(mnUnits == kUnitsCPUCycles)
+			nCurrentTime = GetCPUCycle();
+		else
+			nCurrentTime = GetStopwatchCycle();
+
+		uint64_t nElapsed = nCurrentTime - mnStartTime;
+		nFinalTotalElapsedTime64 += nElapsed;
+
+	} // Now nFinalTotalElapsedTime64 holds the elapsed time in stopwatch cycles. 
+
+	return (nFinalTotalElapsedTime64 * mfStopwatchCyclesToUnitsCoefficient) + 0.49999f;
+}
+
 
 // Other supported processors have fixed-frequency CPUs and thus can 
 // directly use the GetCPUCycle functionality for maximum precision
@@ -166,30 +232,63 @@ inline uint64_t EA::StdC::Stopwatch::GetStopwatchCycle()
 	return GetCPUCycle();
 }
 
-#if defined(EA_PLATFORM_MICROSOFT)
-	#include <windows.h>
+namespace Internal
+{
+    inline double GetPlatformCycleFrequency()
+    {
+        using namespace std::chrono;
+        double perfFreq = static_cast<double>(high_resolution_clock::period::num) / high_resolution_clock::period::den;
+        return perfFreq / 1000.0;
+    }
+}
 
-	inline uint64_t EA::StdC::Stopwatch::GetCPUCycle()
-	{
-		LARGE_INTEGER perfCounter;
-		QueryPerformanceCounter(&perfCounter);
-		return static_cast<uint64_t>(perfCounter.QuadPart);
-	}
+inline double EA::StdC::Stopwatch::GetUnitsPerCPUCycle(EA::StdC::Stopwatch::Units units) 
+{ 
+    switch(units)
+    {
+        case kUnitsCycles:
+        case kUnitsCPUCycles: 
+            return Internal::GetPlatformCycleFrequency();
 
-#elif (defined(EA_PROCESSOR_X86) || defined(EA_PROCESSOR_X86_64)) && (defined(EA_COMPILER_GNUC) || defined(EA_COMPILER_CLANG))
+        // NOTE:  These aren't used by the existing benchmarks.
+        case kUnitsNanoseconds: 
+        case kUnitsMilliseconds:
+        case kUnitsMicroseconds:
+        case kUnitsSeconds:
+        case kUnitsMinutes:
+        case kUnitsUserDefined:
+            break;
+    }
 
-	inline
-	uint64_t EA::StdC::Stopwatch::GetCPUCycle()
-	{
-		uint32_t eaxLow32, edxHigh32;
-		uint64_t result;
+    return 1.0; 
+}
 
-		asm volatile("rdtsc" : "=a" (eaxLow32), "=d" (edxHigh32));
-		result = ((uint64_t)edxHigh32 << 32) | ((uint64_t)eaxLow32);
+inline double EA::StdC::Stopwatch::GetUnitsPerStopwatchCycle(EA::StdC::Stopwatch::Units units) 
+{ 
+    switch(units)
+    {
+        case kUnitsCycles:
+        case kUnitsCPUCycles: 
+            return static_cast<double>(Internal::GetPlatformCycleFrequency());
 
-		return result;
-	}
-#endif
+        // NOTE:  These aren't used by the existing benchmarks.
+        case kUnitsNanoseconds: 
+        case kUnitsMilliseconds:
+        case kUnitsMicroseconds:
+        case kUnitsSeconds:
+        case kUnitsMinutes:
+        case kUnitsUserDefined:
+            break;
+    }
+
+    return 1.0; 
+}
+
+inline uint64_t EA::StdC::Stopwatch::GetCPUCycle()
+{
+    using namespace std::chrono;
+    return high_resolution_clock::now().time_since_epoch().count();
+}
 
 
 #endif  // EASTDC_EASTOPWATCH_H

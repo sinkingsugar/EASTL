@@ -8,7 +8,8 @@
 #define EASTDC_EASPRINTF_H
 
 #include <EABase/eabase.h>
-#include <cstdio>
+#include <EABase/eastdarg.h>
+#include <stdio.h>
 
 #define EASTDC_API
 
@@ -18,8 +19,10 @@ namespace StdC {
 EASTDC_API int Vsnprintf(char8_t* EA_RESTRICT pDestination, size_t n, const char8_t* EA_RESTRICT pFormat, va_list arguments);
 EASTDC_API int Vsnprintf(char16_t* EA_RESTRICT pDestination, size_t n, const char16_t* EA_RESTRICT pFormat, va_list arguments);
 EASTDC_API int Vsnprintf(char32_t* EA_RESTRICT pDestination, size_t n, const char32_t* EA_RESTRICT pFormat, va_list arguments);
-EASTDC_API int Vsnprintf(wchar_t* EA_RESTRICT pDestination, size_t n, const wchar_t* EA_RESTRICT pFormat, va_list arguments);
 
+#if defined(EA_WCHAR_UNIQUE) && EA_WCHAR_UNIQUE
+EASTDC_API int Vsnprintf(wchar_t* EA_RESTRICT pDestination, size_t n, const wchar_t* EA_RESTRICT pFormat, va_list arguments);
+#endif
 
 template<typename T>
 EASTDC_API int Sprintf(T* EA_RESTRICT pDestination, const T* EA_RESTRICT pFormat, ...)
@@ -27,7 +30,7 @@ EASTDC_API int Sprintf(T* EA_RESTRICT pDestination, const T* EA_RESTRICT pFormat
 	va_list arguments;
 	va_start(arguments, pFormat);
 
-	auto result = std::vsprintf(pDestination, pFormat, arguments);
+	auto result = vsprintf(pDestination, pFormat, arguments);
 
 	va_end(arguments);
 
