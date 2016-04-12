@@ -35,8 +35,8 @@
 
 #include <EASTL/internal/config.h>
 #include <EASTL/type_traits.h>
-#include <limits.h>                 // C limits.h header
-#include <float.h>
+//#include <limits.h>                 // C limits.h header
+//#include <float.h>
 #if defined(_YVALS)                 // Dinkumware.
 	#include <ymath.h>
 #endif
@@ -48,7 +48,7 @@
 
 // Disable Warnings:
 //   cast truncates constant value / expression is always false
-EA_DISABLE_VC_WARNING(4310 4296)
+//EA_DISABLE_VC_WARNING(4310 4296)
 
 // EASTL_CUSTOM_FLOAT_CONSTANTS_REQUIRED
 //

@@ -7,12 +7,14 @@
 #define EASTL_INTERNAL_TYPE_TRANFORMATIONS_H
 
 
-#include <EABase/eabase.h>
+//#include <EABase/eabase.h>
 #if defined(EA_PRAGMA_ONCE_SUPPORTED)
 	#pragma once
 #endif
 
-#include <limits.h>
+//#include <limits.h>
+#define EA_ALIGN(n)
+#define EA_ALIGN_OF(type) ((size_t)__alignof__(type))
 
 
 namespace eastl

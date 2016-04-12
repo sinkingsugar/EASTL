@@ -7,13 +7,13 @@
 #define EASTL_INTERNAL_TYPE_PROPERTIES_H
 
 
-#include <EABase/eabase.h>
+//#include <EABase/eabase.h>
 #if defined(EA_PRAGMA_ONCE_SUPPORTED)
 	#pragma once
 #endif
 
-#include <limits.h>
-
+//#include <limits.h>
+#define EA_COMPILER_HAS_FEATURE(x) __has_feature(x)
 
 namespace eastl
 {

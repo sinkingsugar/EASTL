@@ -6,7 +6,7 @@
 #define EASTL_FUNCTIONAL_H
 
 
-#include <EABase/eabase.h>
+//#include <EABase/eabase.h>
 #include <EASTL/internal/config.h>
 #include <EASTL/internal/allocator_traits_fwd_decls.h>
 #include <EASTL/type_traits.h>

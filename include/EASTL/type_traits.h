@@ -239,7 +239,7 @@
 
 
 #include <EASTL/internal/config.h>
-#include <stddef.h>                 // Is needed for size_t usage by some traits.
+//#include <stddef.h>                 // Is needed for size_t usage by some traits.
 
 #if defined(EA_PRAGMA_ONCE_SUPPORTED)
 	#pragma once // Some compilers (e.g. VC++) benefit significantly from using this. We've measured 3-4% build speed improvements in apps as a result.

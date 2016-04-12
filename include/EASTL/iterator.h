@@ -15,7 +15,7 @@
 	#pragma warning(push, 0)
 #endif
 
-#include <stddef.h>
+//#include <stddef.h>
 
 #ifdef _MSC_VER
 	#pragma warning(pop)
@@ -166,9 +166,9 @@ namespace eastl
 		static eastl::yes_type test(typename U::wrapped_iterator_type*, typename eastl::enable_if<eastl::is_class<U>::value>::type* = 0);
 	
 	public:
-		EA_DISABLE_VC_WARNING(6334)
+		//EA_DISABLE_VC_WARNING(6334)
 		static const bool value = (sizeof(test<Iterator>(NULL)) == sizeof(eastl::yes_type));
-		EA_RESTORE_VC_WARNING()
+		//EA_RESTORE_VC_WARNING()
 	};
 
 

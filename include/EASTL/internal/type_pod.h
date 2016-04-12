@@ -7,13 +7,37 @@
 #define EASTL_INTERNAL_TYPE_POD_H
 
 
-#include <EABase/eabase.h>
+//#include <EABase/eabase.h>
 #if defined(EA_PRAGMA_ONCE_SUPPORTED)
 	#pragma once
 #endif
 
-#include <limits.h>
+//#include <limits.h>
 #include <EASTL/type_traits.h>
+
+#ifndef EA_PLATFORM_PTR_SIZE
+	#if defined(__WORDSIZE) // Defined by some variations of GCC.
+		#define EA_PLATFORM_PTR_SIZE ((__WORDSIZE) / 8)
+	#elif defined(_WIN64) || defined(__LP64__) || defined(_LP64) || defined(_M_IA64) || defined(__ia64__) || defined(__arch64__) || defined(__aarch64__) || defined(__mips64__) || defined(__64BIT__) || defined(__Ptr_Is_64)
+		#define EA_PLATFORM_PTR_SIZE 8
+	#elif defined(__CC_ARM) && (__sizeof_ptr == 8)
+		#define EA_PLATFORM_PTR_SIZE 8
+	#else
+		#define EA_PLATFORM_PTR_SIZE 4
+	#endif
+#endif
+
+// EA_PLATFORM_MIN_MALLOC_ALIGNMENT
+// This defines the minimal alignment that the platform's malloc 
+// implementation will return. This should be used when writing custom
+// allocators to ensure that the alignment matches that of malloc
+#ifndef EA_PLATFORM_MIN_MALLOC_ALIGNMENT
+	#if defined EA_PLATFORM_APPLE
+		#define EA_PLATFORM_MIN_MALLOC_ALIGNMENT 16
+	#else
+		#define EA_PLATFORM_MIN_MALLOC_ALIGNMENT (EA_PLATFORM_PTR_SIZE * 2)
+	#endif
+#endif
 
 namespace eastl
 {
@@ -1667,7 +1691,7 @@ namespace eastl
 	// For a complete type T and given 
 	//     template <class U>
 	//     struct test { U u; };
-	// test<T>::˜test() is not deleted (C++11 "= delete").
+	// test<T>::ï¿½test() is not deleted (C++11 "= delete").
 	// T shall be a complete type, (possibly cv-qualified) void, or an array of unknown bound.
 	//
 	///////////////////////////////////////////////////////////////////////

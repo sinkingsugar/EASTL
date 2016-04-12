@@ -6,6 +6,8 @@
 #ifndef EASTL_INTERNAL_CONFIG_H
 #define EASTL_INTERNAL_CONFIG_H
 
+#include <NativePath.h>
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // ReadMe
@@ -60,7 +62,7 @@
 #ifndef EASTL_EABASE_DISABLED
 	#include <EABase/eabase.h>
 #endif
-#include <EABase/eahave.h>
+//#include <EABase/eahave.h>
 
 #if defined(EA_PRAGMA_ONCE_SUPPORTED)
 	#pragma once
@@ -1268,26 +1270,7 @@ namespace eastl
 // useful macro identifier for our type traits implementation.
 //
 #ifndef EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE
-	#if defined(_MSC_VER) && (_MSC_VER >= 1500) // VS2008 or later
-		#pragma warning(push, 0)
-			#include <yvals.h>
-		#pragma warning(pop)
-		#if ((defined(_HAS_TR1) && _HAS_TR1) || _MSC_VER >= 1700)  // VS2012 (1700) and later has built-in type traits support. 
-			#define EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE 1
-		#else
-			#define EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE 0
-		#endif
-	#elif defined(EA_COMPILER_CLANG) && defined(__APPLE__) && defined(_CXXCONFIG) // Apple clang but with GCC's libstdc++.
-		#define EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE 0
-	#elif defined(EA_COMPILER_CLANG)
-		#define EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE 1
-	#elif defined(EA_COMPILER_GNUC) && (EA_COMPILER_VERSION >= 4003) && !defined(__GCCXML__)
-		#define EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE 1
-	#elif defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x8000) // CodeWarrior compiler.
-		#define EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE 1
-	#else
-		#define EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE 0
-	#endif
+	#define EASTL_COMPILER_INTRINSIC_TYPE_TRAITS_AVAILABLE 0
 #endif
 
 
@@ -1538,7 +1521,7 @@ namespace eastl
 
 #ifndef EASTL_SIZE_T
 	#if (EASTL_SIZE_T_32BIT == 0) || (EA_PLATFORM_WORD_SIZE == 4)
-		#include <stddef.h>
+		//#include <stddef.h>
 		#define EASTL_SIZE_T  size_t
 		#define EASTL_SSIZE_T intptr_t
 	#else
