@@ -97,13 +97,13 @@
 #ifdef _MSC_VER
 	#pragma warning(push, 0)
 #endif
-#include <stddef.h>             // size_t, ptrdiff_t, etc.
-#include <stdarg.h>             // vararg functionality.
-#include <stdlib.h>             // malloc, free.
-#include <stdio.h>              // snprintf, etc.
-#include <ctype.h>              // toupper, etc.
-#include <wchar.h>              // toupper, etc.
-	#include <string.h> // strlen, etc.
+//#include <stddef.h>             // size_t, ptrdiff_t, etc.
+//#include <stdarg.h>             // vararg functionality.
+//#include <stdlib.h>             // malloc, free.
+//#include <stdio.h>              // snprintf, etc.
+//#include <ctype.h>              // toupper, etc.
+//#include <wchar.h>              // toupper, etc.
+//	#include <string.h> // strlen, etc.
 #ifdef _MSC_VER
 	#pragma warning(pop)
 #endif

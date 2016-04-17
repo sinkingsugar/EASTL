@@ -73,8 +73,8 @@
 #ifdef _MSC_VER
 	#pragma warning(push, 0)
 #endif
-#include <stdlib.h>
-#include <new>
+//#include <stdlib.h>
+//#include <new>
 #ifdef _MSC_VER
 	#pragma warning(pop)
 #endif

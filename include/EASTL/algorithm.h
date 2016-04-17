@@ -249,8 +249,8 @@
 		#include <intrin.h>
 	#endif
 #endif
-	#include <stddef.h>
-	#include <string.h> // memcpy, memcmp, memmove
+	//#include <stddef.h>
+	//#include <string.h> // memcpy, memcmp, memmove
 #ifdef _MSC_VER
 	#pragma warning(pop)
 #endif

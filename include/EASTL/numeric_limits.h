@@ -1688,7 +1688,7 @@ namespace eastl
 } // namespace eastl
 
 
-EA_RESTORE_VC_WARNING()
+//EA_RESTORE_VC_WARNING()
 
 
 #endif // Header include guard

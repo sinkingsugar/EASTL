@@ -27,7 +27,7 @@
 #define EASTL_INTERNAL_HASHTABLE_H
 
 
-#include <EABase/eabase.h>
+//#include <EABase/eabase.h>
 #if defined(EA_PRAGMA_ONCE_SUPPORTED)
 	#pragma once
 #endif
@@ -40,7 +40,7 @@
 #include <EASTL/utility.h>
 #include <EASTL/algorithm.h>
 #include <EASTL/initializer_list.h>
-#include <string.h>
+//#include <string.h>
 
 #ifdef _MSC_VER
 	#pragma warning(push, 0)
@@ -48,8 +48,8 @@
 	#include <stddef.h>
 	#pragma warning(pop)
 #else
-	#include <new>
-	#include <stddef.h>
+	//#include <new>
+	//#include <stddef.h>
 #endif
 
 #ifdef _MSC_VER

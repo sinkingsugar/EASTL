@@ -116,14 +116,14 @@
 	// The GCC PSP compiler defines standard int types (e.g. uint32_t) but not PRId8, etc.
 	// MSVC doesn't include an inttypes.h header.
 	#if !defined(EA_COMPILER_MSVC)
-		#include <inttypes.h> // PRId8, SCNd8, etc.
+		//#include <inttypes.h> // PRId8, SCNd8, etc.
 	#endif
 	#if defined(_MSC_VER)
 		#pragma warning(push, 0)
 	#endif
-	#include <stdint.h>   // int32_t, INT64_C, UINT8_MAX, etc.
-	#include <math.h>     // float_t, double_t, etc.
-	#include <float.h>    // FLT_EVAL_METHOD.
+	//#include <stdint.h>   // int32_t, INT64_C, UINT8_MAX, etc.
+	//#include <math.h>     // float_t, double_t, etc.
+	//#include <float.h>    // FLT_EVAL_METHOD.
 	#if defined(_MSC_VER)
 		#pragma warning(pop)
 	#endif

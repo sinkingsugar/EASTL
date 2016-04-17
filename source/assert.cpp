@@ -7,25 +7,6 @@
 #include <EASTL/string.h>
 #include <EABase/eabase.h>
 
-#if defined(EA_PLATFORM_MICROSOFT)
-	#pragma warning(push, 0)
-	#if defined _MSC_VER
-		#include <crtdbg.h>
-	#endif
-	#ifndef WIN32_LEAN_AND_MEAN
-		#define WIN32_LEAN_AND_MEAN
-	#endif
-	#include <Windows.h>
-	#pragma warning(pop)
-#elif defined(EA_PLATFORM_ANDROID)
-	#include <android/log.h>
-#else
-	#include <stdio.h>
-#endif
-
-
-
-
 namespace eastl
 {
 

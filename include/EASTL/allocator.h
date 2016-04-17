@@ -21,7 +21,8 @@
 	#pragma once // Some compilers (e.g. VC++) benefit significantly from using this. We've measured 3-4% build speed improvements in apps as a result.
 #endif
 
-
+#define EA_PLATFORM_PTR_SIZE __INTPTR_WIDTH__/8
+#define EA_UNUSED(x) (void)x
 
 namespace eastl
 {

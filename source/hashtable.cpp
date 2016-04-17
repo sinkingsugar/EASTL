@@ -5,8 +5,8 @@
 
 #include <EASTL/internal/hashtable.h>
 #include <EASTL/utility.h>
-#include <math.h>  // Not all compilers support <cmath> and std::ceilf(), which we need below.
-#include <stddef.h>
+//#include <math.h>  // Not all compilers support <cmath> and std::ceilf(), which we need below.
+//#include <stddef.h>
 
 
 #ifdef _MSC_VER

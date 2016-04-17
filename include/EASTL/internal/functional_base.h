@@ -10,6 +10,8 @@
 	#pragma once
 #endif
 
+#define EA_CONSTEXPR constexpr
+
 #include <EASTL/internal/config.h>
 
 namespace eastl

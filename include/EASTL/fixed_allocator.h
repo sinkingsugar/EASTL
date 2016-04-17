@@ -25,7 +25,7 @@
 	#include <new>
 	#pragma warning(pop)
 #else
-	#include <new>
+	//#include <new>
 #endif
 
 #if defined(_MSC_VER)

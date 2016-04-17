@@ -8,6 +8,8 @@
 
 #include <NativePath.h>
 
+#define EA_DISABLE_VC_WARNING(x) 
+#define EA_RESTORE_VC_WARNING()
 
 ///////////////////////////////////////////////////////////////////////////////
 // ReadMe

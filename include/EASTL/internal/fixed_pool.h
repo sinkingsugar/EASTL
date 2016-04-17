@@ -18,6 +18,7 @@
 #ifndef EASTL_INTERNAL_FIXED_POOL_H
 #define EASTL_INTERNAL_FIXED_POOL_H
 
+#include <NativePath.h>
 
 #include <EABase/eabase.h>
 #if defined(EA_PRAGMA_ONCE_SUPPORTED)
@@ -35,7 +36,7 @@
 	#include <new>
 	#pragma warning(pop)
 #else
-	#include <new>
+	//#include <new>
 #endif
 
 #if defined(_MSC_VER)

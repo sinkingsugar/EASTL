@@ -12,8 +12,8 @@
 	#pragma once
 #endif
 
-#include <EASTL/internal/config.h>
-#include <EASTL/numeric_limits.h>
+//#include <EASTL/internal/config.h>
+//#include <EASTL/numeric_limits.h>
 
 namespace eastl
 {

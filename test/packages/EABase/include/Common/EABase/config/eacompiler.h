@@ -179,6 +179,8 @@
 #ifndef INCLUDED_eacompiler_H
 #define INCLUDED_eacompiler_H
 
+#define EA_PLATFORM_PTR_SIZE __INTPTR_WIDTH__ / 8
+
 	#include <EABase/config/eaplatform.h>
 
 	// Note: This is used to generate the EA_COMPILER_STRING macros
@@ -576,9 +578,9 @@
 	//This is duplicated from EABase's eahave.h
 	#if !defined(EA_HAVE_DINKUMWARE_CPP_LIBRARY) && !defined(EA_NO_HAVE_DINKUMWARE_CPP_LIBRARY)
 		#if defined(__cplusplus)
-			EA_DISABLE_ALL_VC_WARNINGS()
-			#include <cstddef> // Need to trigger the compilation of yvals.h without directly using <yvals.h> because it might not exist.
-			EA_RESTORE_ALL_VC_WARNINGS()
+			//EA_DISABLE_ALL_VC_WARNINGS()
+			//#include <cstddef> // Need to trigger the compilation of yvals.h without directly using <yvals.h> because it might not exist.
+			//EA_RESTORE_ALL_VC_WARNINGS()
 		#endif
 
 		#if defined(__cplusplus) && defined(_YVALS) /* If using the Dinkumware Standard library... */
